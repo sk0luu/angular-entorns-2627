@@ -1,11 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, ComponentRef, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Producte } from './interfaces/producte';
 import { Producte as ProducteClass } from './producte';// importamos la clase producto asignando una alias
 import type { WoW } from './interfaces/modelos/WoW';
+import { Tarjeta } from './tarjeta/tarjeta';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Tarjeta],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
