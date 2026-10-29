@@ -1,15 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, ComponentRef, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Producte } from './interfaces/producte';
 import { Producte as ProducteClass } from './producte';// importamos la clase producto asignando una alias
 import type { WoW } from './interfaces/modelos/WoW';
-import { Juego } from './models/joc';
-import { CestaJuegos } from './cistellaJocs';
-import { Alumno } from './alumne';
-import { saludar, esMajorEdat, sumarArray } from './funciones';
+import { Botiga } from './botiga/botiga';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Botiga],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -43,12 +40,16 @@ producte: Producte = {
   id: 1,
   nom: 'PC',
   preu: 1000,
+  estoc: 5,
+  categoria: 'Informática',
   disponible: true
 }
 producte2: Producte = {
   id: 2,
   nom: 'Ivan',
   preu: 5,
+  estoc: 0,
+  categoria: 'Otros',
   disponible: false,
 }
 
@@ -56,6 +57,8 @@ producte3: Producte = {
   id: 3,
   nom: 'Teclado',
   preu: 89.99,
+  estoc: 10,
+  categoria: 'Informática',
   disponible: true,
 }
 
@@ -69,28 +72,6 @@ constructor() {
   console.log(this.p1.toString());
   console.log(this.p1.descripcion());
 
-  // RETO S02 - funciones implementadas
-  console.log('saludar:', saludar('Marta'));
-  console.log('esMajorEdat:', esMajorEdat(25));
-  console.log('sumarArray:', sumarArray([2, 4, 6, 8]));
-
-  const cesta = new CestaJuegos(4);
-  this.juegos.forEach((juego) => cesta.agregarJuego(juego));
-
-  console.log('Jocs actius:', this.getActius());
-  console.log('Joc per id 2:', this.findById(2));
-  console.log('Format joc:', this.formatarElement(this.juegos[0]));
-  console.log('Total actius de la cistella:', cesta.totalActivos());
-  console.log('Noms de la cistella:', cesta.nombresJuegos);
-  console.log('Cistella plena:', cesta.estaLlena());
-
-  const alumno1 = new Alumno('Ana', 18, 'DAW', [7, 8, 9, 6]);
-  const alumno2 = new Alumno('Pau', 20, 'SMX', [5, 6, 4, 7]);
-
-  console.log(alumno1.presentar());
-  console.log('haAprobado Ana:', alumno1.haAprobado);
-  console.log(alumno2.presentar());
-  console.log('haAprobado Pau:', alumno2.haAprobado);
 }
 
 //1.Agregar un metodo de clase producto descripcion() que devuelva un string con nombre y precio
@@ -100,6 +81,7 @@ constructor() {
 //3. crear un nuevo producto y mostrar el descuento por consola
 
 //4. buscar la manera de mostrar el descuento en el popup
+
 
 
 
@@ -113,80 +95,22 @@ arrayWoW: WoW[] = [
   {id: 5, nom: 'Hawnk', clase: 'Cazador', raza: 'Tauren', nivel: 70, oro: 100, nivelMax: true},
 ]
 
-juegos: Juego[] = [
-  {
-    id: 1,
-    nombre: 'The Legend of Zelda: Breath of the Wild',
-    genero: 'Acción/Aventura',
-    plataforma: 'Nintendo Switch',
-    anyoLanzamiento: 2017,
-    precio: 59.99,
-    activo: true,
-    valoracion: 10,
-    descripcion: 'Juego de mundo abierto con exploración y enigmas.'
-  },
-  {
-    id: 2,
-    nombre: 'Cyberpunk 2077',
-    genero: 'RPG',
-    plataforma: 'PC',
-    anyoLanzamiento: 2020,
-    precio: 49.99,
-    activo: true,
-    valoracion: 8,
-    descripcion: 'Mundo abierto futurista con decisiones importantes.'
-  },
-  {
-    id: 3,
-    nombre: 'Stardew Valley',
-    genero: 'Simulación',
-    plataforma: 'PC',
-    anyoLanzamiento: 2016,
-    precio: 14.99,
-    activo: true,
-    valoracion: 9,
-    descripcion: 'Granja y vida rural con mucha relajación.'
-  },
-  {
-    id: 4,
-    nombre: 'Elden Ring',
-    genero: 'Action RPG',
-    plataforma: 'PlayStation 5',
-    anyoLanzamiento: 2022,
-    precio: 69.99,
-    activo: false,
-    valoracion: 9,
-    descripcion: 'Juego de acción con mundos enormes y dificultad alta.'
-  },
-  {
-    id: 5,
-    nombre: 'Animal Crossing: New Horizons',
-    genero: 'Simulación',
-    plataforma: 'Nintendo Switch',
-    anyoLanzamiento: 2020,
-    precio: 39.99,
-    activo: true,
-    descripcion: 'Crea tu isla y vive el día a día.'
-  }
-];
-
 get getactius() {
   return this.arrayWoW.filter((wow) => wow.nivelMax === true);
 }
 
-findById(id: number): WoW | Juego | undefined {
-  return this.arrayWoW.find((wow) => wow.id === id) ?? this.juegos.find((juego) => juego.id === id);
+findById(id: number) {
+  return this.arrayWoW.find((wow) => wow.id === id);
 }
 
-getActius(): Juego[] {
-  return this.juegos.filter((juego) => juego.activo === true);
+formatarElement(element: WoW) {
+  return `Nombre: ${element.nom} - clase: ${element.clase} - raza: ${element.raza} - nivel: ${element.nivel} - oro: ${element.oro ?? 0} - nivelMax: ${element.nivelMax}`;
 }
+ciudades: string[] = ['Barcelona', 'Girona', 'Lleida', 'Tarragona'];
 
-formatarElement(element: WoW | Juego): string {
-  if ('clase' in element) {
-    return `Nombre: ${element.nom} - clase: ${element.clase} - raza: ${element.raza} - nivel: ${element.nivel} - oro: ${element.oro ?? 0} - nivelMax: ${element.nivelMax}`;
-  }
+/* <!-- crea un array de minimo 5 elementos en el app.ts
+ usa @for para mostrar los elementos del array
+ $index -> para mostrar el orden--> */
 
-  return `Nombre: ${element.nombre} - Género: ${element.genero} - Plataforma: ${element.plataforma} - Año: ${element.anyoLanzamiento} - Precio: ${element.precio}€ - Activo: ${element.activo}`;
-}
+arrayAlumnos: string[] = ['Pere', 'Iván', 'Jordi', 'Marcelo', 'Gerard'];
 }

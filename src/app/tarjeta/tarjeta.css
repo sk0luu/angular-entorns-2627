@@ -1,0 +1,24 @@
+/*Este fichero teiene los estilos encapsulados --> solo afecta a este componente*/
+
+.tarjeta {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px;
+    width: 250px;
+    display: inline-block;
+}
+h1{
+    color: black;
+    font-size: 25px;
+}
+h2 {
+    color: rgba(73, 80, 75, 0.933);
+    font-size: 1.1rem;
+}
+
+p {
+    color: grey
+}
+
+/*COMO MUESTRO ESTE COMPONENTE??????*/

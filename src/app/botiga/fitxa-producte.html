@@ -1,0 +1,17 @@
+<article [class]="classesFitxa" [class.confirmat]="afegitAlCarret">
+  <img
+    [src]="producte.imatgeUrl || 'SENSE IMATGE'"
+    [alt]="'Imatge de ' + producte.nom"
+    width="200"
+    height="160"
+  >
+  <h3>{{ producte.nom }}</h3>
+  <p class="preu">{{ producte.preu }} €</p>
+  <button
+    class="btn-compra"
+    [disabled]="afegitAlCarret || !teEstoc"
+    (click)="afegir()"
+  >
+    Afegir al carret
+  </button>
+</article>

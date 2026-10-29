@@ -1,0 +1,38 @@
+
+<section class="botiga">
+  <h1>{{ title }}</h1>
+
+  <h2>Binding de classe amb condició</h2>
+  <p>
+    <code>[class.nom]="condició"</code> aplica una classe segons una condició.
+    També pots fer servir <code>[class.nom]="expressió"</code> amb una expressió
+    que vingui d'un mètode.
+  </p>
+  <div class="graella">
+    @for (p of productes; track p.id) {
+      <article class="fitxa" [class.fitxa-esgotada]="!teEstoc(p)">
+        <img [src]="imatgeSegura(p)" [alt]="'Imatge de ' + p.nom" width="200" height="160">
+        <h3>{{ p.nom }}</h3>
+        <p class="preu" [style.color]="p.preu > 500 ? '#c00000' : 'blue'">
+          {{ p.preu }} €
+        </p>
+        <button class="btn-compra" [disabled]="carret.includes(p.id) || !teEstoc(p)" (click)="afegir(p)">Afegir al carret</button>
+      </article>
+    }
+  </div>
+
+  <h2>Binding de classe calculat</h2>
+  <p>
+    <code>[style.color]="p.preu &gt; 500 ? '#C00000' : 'blue'"</code>
+    calcula el color del text segons el preu.
+  </p>
+  <div class="graella">
+    @for (p of productes; track p.id) {
+      <app-fitxa-producte
+        [producte]="p"
+        [jaAfegit]="carret.includes(p.id)"
+        (producteAfegit)="afegir($event)"
+      />
+    }
+  </div>
+</section>

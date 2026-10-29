@@ -1,0 +1,39 @@
+<!--Este fichero contiene la vista: estructura HTML y bindings {{}}-->
+
+<!--<div class = "targeta">
+    <h2> {{nom}}</h2>
+    <h2> {{preu}}</h2>
+    <p>{{estoc}}</p>
+    <p>precio con iva (21%): {{preu*1.21}}</p>
+    <p>{{estoc > 0 ? 'Disponible' : 'Agotado'}}</p>
+    <p> Nombre en mayusculas: {{nom.toUpperCase()}}</p>
+</div> -->
+
+<div class = "tarjeta">
+<h2>{{producto.nom}}</h2>
+<p class = "preu"> {{ producto.preu }}</p>
+
+@if (producto.preu < 20) {
+    <span class="etiqueta oferta">Oferta</span>
+}
+@if (producto.preu === 0) {
+    <span class="etiqueta gratuito">Gratuito</span>
+}
+@if (producto.preu > 100) {
+    <span class="etiqueta premium">Premium</span>
+}
+
+<p>Estoc: {{producto.estoc}}</p>
+<p>Categoria: {{producto.categoria}}</p>
+@if(producto.estoc > 0) {
+    <p>Disponible</p>
+} @else {
+    <p>Agotado</p>
+}
+<button type="button" (click)="toggleDesc()" [attr.aria-expanded]="mostrarDesc">
+    {{ mostrarDesc ? 'Ocultar descripción' : 'Mostrar descripción' }}
+</button>
+@if (mostrarDesc && producteXif.descripcio) {
+    <p>{{ producteXif.descripcio }}</p>
+}
+</div>
